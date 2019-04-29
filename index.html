@@ -22,58 +22,43 @@
 
         <div class="container d-flex flex-wrap justify-content-around" v-if="books.length != 0">
 
-            <div class="card border-0" v-for="book in books">
-                
-                <img class="front w-100 h-auto" :src="book.portada" alt="book.jpg">
-               
+            <div v-for="(book, index) in books">
+                <div class="card border-0">
 
-                <div class="back w-100 p-2 text-justify d-flex flex-wrap align-items-center">
-                    <div>
-                        <p class="font-weight-bold align-item-center">{{book.titulo}}</p>
-                        <p class="mb-1">language: {{book.idioma}}</p>
-                        <p>{{book.descripcion}}</p>
+                    <img class="front w-100 h-auto" :src="book.portada" alt="book.jpg">
+
+                    <div class="back w-100 p-2 text-justify d-flex flex-wrap align-items-center">
+                        <div>
+                            <p class="font-weight-bold align-item-center">{{book.titulo}}</p>
+                            <p class="mb-1">language: {{book.idioma}}</p>
+                            <p>{{book.descripcion}}</p>
+                        </div>
+                        <button type="button" class="btn btn-secondary align-self-end" data-toggle="modal" :data-target="'#book' + (index+1)">More</button>
                     </div>
-                    <button class="align-self-end">more</button>
                 </div>
-            </div>
 
-            <!--
-
-            <div class="test p-3 text-justify d-flex flex-wrap align-items-center" v-for="book in books">
-                <div>
-                    <p class="font-weight-bold align-item-center">{{book.titulo}}</p>
-                    <p>language: {{book.idioma}}</p>
-                    <p>{{book.descripcion}}</p>
-                </div>
-                <button class="align-self-end">more</button>
-            </div>
--->
-
-
-        </div>
-
-
-        <!--
-        <div class="container" v-if="books.length != 0">
-            <div v-for="book in books">
-                <div class="card w-25 h-auto p-3">
-                    <div class="front w-100">
-                        <img class="w-100 h-auto" :src="book.portada" alt="book.jpg">
-                    </div>
-
-                    <div class="back w-100 p-6 text-justify">
-                        <p class="font-weight-bold align-item-center">{{book.titulo}}</p>
-                        <p>language: {{book.idioma}}</p>
-                        <p>{{book.descripcion}}</p>
+                <div class="modal fade" :id="'book' + (index+1)" tabindex="-1" role="dialog" :aria-labelledby="'book' + (index+1) + 'Label'" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" :id="'book' + (index+1) + 'Label'">{{book.titulo}}</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <img class="front w-100 h-auto" :src="book.detalle" alt="book.jpg">
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
--->
-
     </main>
-
-
+        
     <script src="https://cdn.jsdelivr.net/npm/vue"></script>
     <script src="main.js"></script>
 </body></html>

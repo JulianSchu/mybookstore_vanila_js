@@ -19,3 +19,4 @@ let vm = new Vue({
         this.fetchData();
     }
 })
+
