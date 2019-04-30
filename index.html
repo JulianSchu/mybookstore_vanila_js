@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="bg-danger">
 
 <head>
 
@@ -18,54 +18,92 @@
 </head>
 
 <body>
-    <main class="container-fluid" id="books">
 
-        <div class="container input-group flex-nowrap mb-3">
-            <input type="text" class="form-control border border-dark" placeholder="Please enter name (capital letters are considered)" aria-label="Username" aria-describedby="addon-wrapping" v-model="search">
-            <div class="input-group-prepend">
-                <span class="input-group-text text-dark font border border-dark " id="addon-wrapping"><i class="fas fa-search"></i></span>
+    <main class="container-fluid bg-danger px-0" id="books">
+
+        <div class="container d-flex flex-wrap align-items-end px-0">
+            <div class="col-12 col-md-8 d-flex flex-wrap align-items-center px-0 my-3">
+                <div>
+                    <img class="logo pr-4 py-4" src="reading.png" alt="logo.png">
+                </div>
+                <div>
+                    <h1 class="display-4 font-weight-bold text-light">My Bookstore</h1>
+                    <h1 class="text-black-50">Reading is fundamental</h1>
+                </div>
             </div>
+            <div class="col-12 col-md-4 px-0 my-3">
+                <div class="input-group flex-nowrap mb-3">
+                    <input type="text" class="form-control border border-warning" placeholder="Please enter (capital letters are considered)" aria-label="Username" aria-describedby="addon-wrapping" v-model="search" v-on:keyup="nullResult()">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text text-dark font border border-warning rounded-right" id="addon-wrapping"><i class="fas fa-search"></i></span>
+                    </div>
+                </div>
 
+            </div>
         </div>
 
-        <div class="container d-flex flex-wrap justify-content-around" v-if="books.length != 0">
+        <div class="container bg-light d-flex flex-wrap justify-content-around" v-if="books.length != 0">
 
             <div v-for="(book, index) in filteredBooks">
                 <div class="card border-0">
-
                     <img class="front w-100 h-auto" :src="book.portada" alt="book.jpg">
-
-                    <div class="back w-100 p-2 text-justify d-flex flex-wrap align-items-center">
-                        <div>
-                            <p class="font-weight-bold align-item-center">{{book.titulo}}</p>
-                            <p class="mb-1">language: {{book.idioma}}</p>
+                    <div class="back w-100 p-2 text-center d-flex flex-wrap align-content-between">
+                        <div class="w-100 align-items-center">
+                            <p class="font-weight-bold">{{book.titulo}}</p>
+                        </div>
+                        <div class="w-100 align-items-center">
+                            <p> {{book.idioma}}</p>
                             <p>{{book.descripcion}}</p>
                         </div>
-                        <button type="button" class="btn btn-secondary align-self-end" data-toggle="modal" :data-target="'#book' + (index+1)">More</button>
+                        <div class="w-100 d-flex justify-content-center">
+                        <a href='#myBooks' :data-slide-to='index'>
+                            <button type="button" class="btn btn-secondary py-1" data-toggle="modal" data-target="#secBookPic">More</button>
+                        </a>
+                        </div>
                     </div>
                 </div>
+            </div>
 
-                <div class="modal fade" :id="'book' + (index+1)" tabindex="-1" role="dialog" :aria-labelledby="'book' + (index+1) + 'Label'" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" :id="'book' + (index+1) + 'Label'">{{book.titulo}}</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
+            <div id="secBookPic" class="modal fade">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div id="myBooks" class="carousel slide" data-interval="false">
+                            <div class="carousel-inner">
+                                <div v-for="(book, index) in filteredBooks" :class="book.carousel_class">
+                                    <div class="modal-header">
+                                        <h4>{{book.titulo}}</h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        <img class="w-100 h-auto" :src="book.detalle" alt="book.jpg">
+                                    </div>
+                                </div>
                             </div>
-                            <div class="modal-body">
-                                <img class="front w-100 h-auto" :src="book.detalle" alt="book.jpg">
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            </div>
+                            <a class="carousel-control-prev" href="#myBooks" role="button" data-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="sr-only">Previous</span>
+                            </a>
+                            <a class="carousel-control-next" href="#myBooks" role="button" data-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="sr-only">Next</span>
+                            </a>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+
+        <div v-show="footer" class="container-fluid bg-light">
+            <div class="container footer d-flex align-items-center">
+                <h4 class="text-danger font-weight-bold">Sorry. We don't have this book.</h4>
+            </div>
+        </div>
+
     </main>
+    <footer class="bg-danger">
+    </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/vue"></script>
     <script src="main.js"></script>

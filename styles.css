@@ -12,6 +12,7 @@
 }
 
 .back {
+    height: 355px;
     position: absolute;
     transform: rotateY(180deg);
 }
@@ -20,3 +21,18 @@
     transform: rotateY(180deg)
 }
 
+.modal.and.carousel {
+    position: fixed;
+}
+
+.logo {
+    width: 200px;
+}
+
+footer {
+    height: 100px;
+}
+
+.footer {
+    height: 200px;
+}
