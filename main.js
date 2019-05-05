@@ -2,21 +2,31 @@ fetch('https://api.myjson.com/bins/udbm5')
     .then(res => res.json())
     .then(data => {
         let books = data.books;
-        books.forEach(function (each) {
-            if (books.indexOf(each) === 0) {
-                each.carousel_class = 'carousel-item active'
-            } else {
-                each.carousel_class = 'carousel-item'
-            }
-        });
         createCard(books);
         createCarousel(books);
+        let dataStr = JSON.stringify(data)
+
+        let para = document.createElement('p');
+        para.innerHTML = dataStr;
+        para.setAttribute('hidden', 'true');
+        para.setAttribute('id', 'dataStr')
+
+        document.body.appendChild(para);
     })
     .catch(err => console.log(err))
 
+let search = document.getElementById('search')
+
+search.addEventListener('keyup', filteredBooks)
+
 
 function createCard(books) {
-    let bookcards = document.getElementById('bookcards')
+    let bookcards = document.getElementById('bookcards');
+
+    let defaulDiv = document.createElement('div');
+    defaulDiv.setAttribute('id', 'defaultDiv');
+    defaulDiv.setAttribute('class', 'container bg-light d-flex flex-wrap justify-content-around');
+
     books.forEach(function (each) {
         let n = books.indexOf(each)
         let card = document.createElement('div');
@@ -48,6 +58,17 @@ function createCard(books) {
         text.appendChild(pTextText);
         content.appendChild(text);
 
+        let secPicLink = document.createElement('p');
+        secPicLink.innerHTML = each.detalle;
+        secPicLink.setAttribute('hidden', 'true');
+        content.appendChild(secPicLink);
+
+        let firstPicLink = document.createElement('p');
+        firstPicLink.innerHTML = each.portada;
+        firstPicLink.setAttribute('hidden', 'true');
+        content.appendChild(firstPicLink);
+
+
         let more = document.createElement('div');
         more.setAttribute('class', 'w-100 d-flex justify-content-center')
         let moreLink = document.createElement('a');
@@ -63,12 +84,27 @@ function createCard(books) {
         more.appendChild(moreLink);
         content.appendChild(more);
 
-        bookcards.appendChild(card);
-    })
+        defaulDiv.appendChild(card);
+    });
+    bookcards.appendChild(defaulDiv);
 }
 
 function createCarousel(books) {
-    let carousel = document.getElementById('carousel-inner');
+
+    books.forEach(function (each) {
+        if (books.indexOf(each) === 0) {
+            each.carousel_class = 'carousel-item active'
+        } else {
+            each.carousel_class = 'carousel-item'
+        }
+    });
+
+    let carousel = document.createElement('div');
+    carousel.setAttribute('id', 'carousel-inner');
+    carousel.setAttribute('class', 'carousel-inner');
+
+    let myBooks = document.getElementById('myBooks');
+
     books.forEach(function (each) {
         let item = document.createElement('div');
         item.setAttribute('class', each.carousel_class);
@@ -89,38 +125,37 @@ function createCarousel(books) {
         modalBody.appendChild(secIMG);
         item.appendChild(modalBody);
         carousel.appendChild(item);
-    })
+    });
+    myBooks.appendChild(carousel);
 
 }
 
-let search = document.getElementById('search')
-
-search.addEventListener('keyup', filteredBooks)
-
 function filteredBooks() {
-    let str = document.getElementById('search').value.toLowerCase();
-    let allCards = document.getElementsByClassName('card');
-    for (i = 0; i < allCards.length; i++) {
-        let paras = allCards[i].getElementsByTagName('p');
-        let longText = '';
-        for (p = 0; p < paras.length; p++) {
-            longText = longText + ' ' + paras[p].innerHTML;
-        };
-        if (longText.toLowerCase().match(str)) {
-            allCards[i].setAttribute('class', 'card border-0')
-        } else {
-            allCards[i].setAttribute('class', 'card border-0 d-none')
-        }
-    };
 
-    let bookcards = document.getElementById('bookcards')
-    let notResult = bookcards.getElementsByClassName('d-none');
+    let dataStr = document.getElementById('dataStr').innerHTML;
+    let bookdata = JSON.parse(dataStr).books;
+
+    let bookcards = document.getElementById('defaultDiv');
+    bookcards.parentNode.removeChild(bookcards);
+
+    let defaultSecDiv = document.getElementById('carousel-inner');
+    defaultSecDiv.parentNode.removeChild(defaultSecDiv);
+
+    let str = document.getElementById('search').value.toLowerCase();
+
+    let secBookSet = bookdata.filter((book) => {
+        if (book.titulo.toLowerCase().match(str) || book.descripcion.toLowerCase().match(str) || book.idioma.toLowerCase().match(str)) return true
+    });
+
+    createCard(secBookSet);
+    createCarousel(secBookSet);
 
     let footer = document.getElementById('footer');
-    if (notResult.length === allCards.length) {
+    if (secBookSet.length === 0) {
         footer.setAttribute('class', 'container-fluid bg-light')
     } else {
         footer.setAttribute('class', 'd-none')
 
     }
+
 }
