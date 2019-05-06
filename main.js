@@ -16,6 +16,7 @@ fetch('https://api.myjson.com/bins/udbm5')
     .catch(err => console.log(err))
 
 let search = document.getElementById('search')
+console.log('abc')
 
 search.addEventListener('keyup', filteredBooks)
 
